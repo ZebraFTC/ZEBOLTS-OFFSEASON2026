@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Zebolts;
+ package org.firstinspires.ftc.teamcode.Zebolts;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -9,9 +9,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
 public class MecanumDrive extends OpMode {
-    public static final double LEFT_OPEN = .2;
+    public static final double LEFT_OPEN = .1;
     public static final double LEFT_CLOSED = 0;
-    public static final double RIGHT_CLOSED = .2;
+    public static final double RIGHT_CLOSED = .1;
     public static final double RIGHT_OPEN = 0;
     public DcMotor frontLeft;
     public DcMotor frontRight;
@@ -59,7 +59,7 @@ public class MecanumDrive extends OpMode {
     public void loop()
     {
         //drive inputs
-        ySpeed = Math.signum(-gamepad1.left_stick_y) * Math.pow(gamepad1.left_stick_y, 2) * MAX_SPEED;
+        ySpeed = Math.signum(gamepad1.left_stick_y) * Math.pow(gamepad1.left_stick_y, 2) * MAX_SPEED;
         xSpeed = Math.signum(gamepad1.left_stick_x) * Math.pow(gamepad1.left_stick_x, 2) * MAX_SPEED;
         turnSpeed = Math.signum(gamepad1.right_stick_x) * Math.pow(gamepad1.right_stick_x, 2) * MAX_SPEED;
 
