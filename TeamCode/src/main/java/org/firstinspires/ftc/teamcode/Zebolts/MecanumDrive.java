@@ -9,9 +9,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
 public class MecanumDrive extends OpMode {
-    public static final double LEFT_OPEN = .1;
+    public static final double LEFT_OPEN = .2;
     public static final double LEFT_CLOSED = 0;
-    public static final double RIGHT_CLOSED = .1;
+    public static final double RIGHT_CLOSED = .15;
     public static final double RIGHT_OPEN = 0;
     public DcMotor frontLeft;
     public DcMotor frontRight;
@@ -47,6 +47,9 @@ public class MecanumDrive extends OpMode {
         motorArm = hardwareMap.get(DcMotor.class, "ARM");
         clawLeft = hardwareMap.get(Servo.class, "CL");
         clawRight = hardwareMap.get(Servo.class, "CR");
+        motorArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -85,6 +88,7 @@ public class MecanumDrive extends OpMode {
         telemetry.addData("error", errorArm);
         telemetry.addData("Target", armTarget);
         telemetry.addData("CurPos", currentArmPos);
+        telemetry.addData("ArmPower", armPower);
 
         //arm position stuff
         if (gamepad1.dpad_up)
