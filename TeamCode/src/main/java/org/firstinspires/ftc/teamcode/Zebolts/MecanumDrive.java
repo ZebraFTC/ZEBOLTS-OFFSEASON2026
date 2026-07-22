@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp
 public class MecanumDrive extends OpMode {
     public static final double LEFT_OPEN = .2;
-    public static final double LEFT_CLOSED = 0;
-    public static final double RIGHT_CLOSED = .15;
+    public static final double LEFT_CLOSED = 0.05;
+    public static final double RIGHT_CLOSED = .20;
     public static final double RIGHT_OPEN = 0;
     public DcMotor frontLeft;
     public DcMotor frontRight;
@@ -21,7 +21,7 @@ public class MecanumDrive extends OpMode {
     public Servo clawLeft;
     public Servo clawRight;
 
-    final double MAX_SPEED = 1;
+    final double MAX_SPEED = .6;
     public double ySpeed;
     public double xSpeed;
     public double turnSpeed;
@@ -49,6 +49,9 @@ public class MecanumDrive extends OpMode {
         clawRight = hardwareMap.get(Servo.class, "CR");
         motorArm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorArm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        clawLeft.setPosition(LEFT_CLOSED);
+        clawRight.setPosition(RIGHT_CLOSED);
 
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -99,11 +102,12 @@ public class MecanumDrive extends OpMode {
             armTarget -= MANUAL_CHANGE;
         }
 
-        if (gamepad1.left_bumper && !leftBumperWasDown)
+        if (gamepad1.left_trigger_pressed && !gamepad1.leftTriggerWasReleased())
         {
             if(clawLeft.getPosition() == LEFT_CLOSED)
             {
                 clawLeft.setPosition(LEFT_OPEN);
+
             }
             else
             {
@@ -111,7 +115,7 @@ public class MecanumDrive extends OpMode {
             }
         }
 
-        if (gamepad1.right_bumper && !rightBumperWasDown)
+        if (gamepad1.right_trigger_pressed && !gamepad1.rightTriggerWasPressed())
         {
             if(clawRight.getPosition() == RIGHT_CLOSED)
             {
