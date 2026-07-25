@@ -13,6 +13,10 @@ public class MecanumDrive extends OpMode {
     public static final double LEFT_CLOSED = 0;
     public static final double RIGHT_CLOSED = .2;
     public static final double RIGHT_OPEN = 0;
+    //public static final double LEFT_OPEN = .2;
+    //public static final double LEFT_CLOSED = 0.05;
+    //public static final double RIGHT_CLOSED = .20;
+    //public static final double RIGHT_OPEN = 0;
     public DcMotor frontLeft;
     public DcMotor frontRight;
     public DcMotor backRight;
@@ -21,7 +25,7 @@ public class MecanumDrive extends OpMode {
     public Servo clawLeft;
     public Servo clawRight;
 
-    final double MAX_SPEED = 1;
+    final double MAX_SPEED = .6;
     public double ySpeed;
     public double xSpeed;
     public double turnSpeed;
@@ -48,8 +52,8 @@ public class MecanumDrive extends OpMode {
         clawLeft = hardwareMap.get(Servo.class, "CL");
         clawRight = hardwareMap.get(Servo.class, "CR");
 
-        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+//        frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         offsetArm = motorArm.getCurrentPosition();
         motorArm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -95,7 +99,7 @@ public class MecanumDrive extends OpMode {
             armTarget -= MANUAL_CHANGE;
         }
 
-        if (gamepad1.left_bumper && !leftBumperWasDown)
+        if (gamepad1.left_trigger_pressed)
         {
             if(clawLeft.getPosition() == LEFT_CLOSED)
             {
@@ -107,7 +111,7 @@ public class MecanumDrive extends OpMode {
             }
         }
 
-        if (gamepad1.right_bumper && !rightBumperWasDown)
+        if (gamepad1.right_trigger_pressed)
         {
             if(clawRight.getPosition() == RIGHT_CLOSED)
             {
@@ -117,6 +121,11 @@ public class MecanumDrive extends OpMode {
             {
                 clawRight.setPosition(RIGHT_CLOSED);
             }
+        }
+        if (gamepad1.xWasPressed())
+        {
+            clawLeft.setPosition(LEFT_OPEN);
+            clawRight.setPosition(RIGHT_OPEN);
         }
 
         leftBumperWasDown = gamepad1.left_bumper;
