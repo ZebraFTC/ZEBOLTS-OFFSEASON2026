@@ -6,17 +6,17 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 @TeleOp
 public class MecanumDrive extends OpMode {
-    public static final double LEFT_OPEN = .2;
-    public static final double LEFT_CLOSED = 0;
-    public static final double RIGHT_CLOSED = .2;
-    public static final double RIGHT_OPEN = 0;
-    //public static final double LEFT_OPEN = .2;
-    //public static final double LEFT_CLOSED = 0.05;
-    //public static final double RIGHT_CLOSED = .20;
-    //public static final double RIGHT_OPEN = 0;
+    public static final double LEFT_CLOSED = .25;
+    public static final double LEFT_OPEN = 0;
+    public static final double RIGHT_OPEN = .18;
+    public static final double RIGHT_CLOSED = 0;
+    private static final Logger log = LoggerFactory.getLogger(MecanumDrive.class);
     public DcMotor frontLeft;
     public DcMotor frontRight;
     public DcMotor backRight;
@@ -25,7 +25,7 @@ public class MecanumDrive extends OpMode {
     public Servo clawLeft;
     public Servo clawRight;
 
-    final double MAX_SPEED = .6;
+    private double MAX_SPEED = .6;
     public double ySpeed;
     public double xSpeed;
     public double turnSpeed;
@@ -52,7 +52,6 @@ public class MecanumDrive extends OpMode {
         clawLeft = hardwareMap.get(Servo.class, "CL");
         clawRight = hardwareMap.get(Servo.class, "CR");
 
-//        frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
         offsetArm = motorArm.getCurrentPosition();
@@ -60,8 +59,7 @@ public class MecanumDrive extends OpMode {
         armTarget = 0;
     }
 
-    public void loop()
-    {
+    public void loop() {
         //drive inputs
         ySpeed = Math.signum(-gamepad1.left_stick_y) * Math.pow(gamepad1.left_stick_y, 2) * MAX_SPEED;
         xSpeed = Math.signum(gamepad1.left_stick_x) * Math.pow(gamepad1.left_stick_x, 2) * MAX_SPEED;
@@ -72,6 +70,12 @@ public class MecanumDrive extends OpMode {
         frontRight.setPower(ySpeed - xSpeed - turnSpeed);
         backLeft.setPower(ySpeed - xSpeed + turnSpeed);
         backRight.setPower(ySpeed + xSpeed - turnSpeed);
+        //if (gamepad1.left_stick_button)
+        //{
+            //if (MAX_SPEED <= 1){
+            //    MAX_SPEED
+            //}
+       // }
 
         //arm logic
         currentArmPos = motorArm.getCurrentPosition() - offsetArm;
@@ -98,8 +102,14 @@ public class MecanumDrive extends OpMode {
         {
             armTarget -= MANUAL_CHANGE;
         }
+        if (gamepad1.a) {
+            armTarget = 0;
+        }
+        if (gamepad1.b) {
+            armTarget = 500;
 
-        if (gamepad1.left_trigger_pressed)
+        }
+        if (gamepad1.left_trigger_pressed && leftBumperWasDown)
         {
             if(clawLeft.getPosition() == LEFT_CLOSED)
             {
@@ -122,13 +132,13 @@ public class MecanumDrive extends OpMode {
                 clawRight.setPosition(RIGHT_CLOSED);
             }
         }
-        if (gamepad1.xWasPressed())
+        if (gamepad1.x)
         {
             clawLeft.setPosition(LEFT_OPEN);
             clawRight.setPosition(RIGHT_OPEN);
         }
 
-        leftBumperWasDown = gamepad1.left_bumper;
+        leftBumperWasDown = gamepad1.left_trigger_pressed;
         rightBumperWasDown = gamepad1.right_bumper;
     }
 }
