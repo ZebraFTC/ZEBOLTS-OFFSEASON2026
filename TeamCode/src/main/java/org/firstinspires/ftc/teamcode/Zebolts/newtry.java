@@ -148,7 +148,7 @@ public class newtry extends OpMode {
         }
 
         // --- IN
-        // Left tr
+        // L
         if (gamepad2.left_trigger > 0.1) {
             intake.setPower(1.0); // Intake
         } else if (gamepad2.right_trigger > 0.1) {
